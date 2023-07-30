@@ -17,7 +17,9 @@ add integration tests
 # How to deploy
 
 # Improvements propositions:
-accessibility  
+add eslint and prettier  
+support multiple languages  
+accessibility (WCAG 2.0, use different heading levels)  
 make export option for chart (csv, image)  
 If there are multiple projects using charts, then I would make library of common components and add our chart and data manipulation functions there  
 If the data is shared across views, then we could add store or context  

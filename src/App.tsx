@@ -1,26 +1,81 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import { ReactComponent as CircleIcon } from './icons/CircleHalfFull.svg';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 function App() {
+  const test = 1;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Root>
+      <Typography variant="h5" mb={3}>
+        Adverity Advertising Data ETL-V Challenge
+      </Typography>
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={2} sx={{ gridAutoColumns: '1fr', gridAutoFlow: 'column' }}>
+          <Grid item xs={12} sx={{ fontSize: 18 }}>
+            <Item>
+              - Select zero to N <i>Datasources</i><br />
+              - Select zero to N <i>Campaigns</i>
+              <Box mb={2}>
+                <Typography variant="caption">
+                (where zero means "All")
+                </Typography>
+              </Box>
+              Hitting "Apply", filters the chart to show a timeseries for both <i>Clicks</i> and <i>Impressions</i> for given <i>Datasources</i> and <i>Campaigns</i> - logical AND
+            </Item>
+          </Grid>
+          <Grid item xs={3}>
+            <Item sx={{ background: '#ddf3ff' }}>
+              <Typography variant="h5" mb={3}>
+                Filter dimension values
+              </Typography>
+              <FilterTitle>
+                <span>Datasource</span>
+                <CircleIcon />
+                <RefreshIcon />
+              </FilterTitle>
+            </Item>
+          </Grid>
+          <Grid item xs={9}>
+            <Item>
+              <Typography variant="h5" mb={3}>  
+                Datasource "Doubleclick (dfa)" and "Metrics"; All Campaigns
+              </Typography>
+              <ChartPlaceholder />
+            </Item>
+          </Grid>
+        </Grid>
+      </Box>
+    </Root>
   );
 }
+
+const Root = styled('div')(({ theme }) => ({
+  padding: theme.spacing(2),
+}));
+
+const Item = styled('div')(({ theme }) => ({
+  padding: theme.spacing(1),
+  border: `1px solid ${theme.palette.divider}`
+}));
+
+const FilterTitle = styled('div')(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+  fontSize: 16,
+  fontWeight: 'bold',
+}));
+
+const ChartPlaceholder = styled('div')(() => ({
+  height: 300,
+  width: '100%',
+  background: '#ddf3ff'
+}));
 
 export default App;
