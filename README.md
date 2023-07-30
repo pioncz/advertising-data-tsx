@@ -1,6 +1,6 @@
 # TODO:  
-add material ui, lodash  
-prototype layout (with all inputs, blue rect as chart placeholder)  
++add material ui, lodash  
++prototype layout (with all inputs, blue rect as chart placeholder)  
 import data  
 find and add chart to the project  
 add unit test for filtering  
@@ -15,6 +15,9 @@ add integration tests
 # How to run
 
 # How to deploy
+
+# Side notes
+Probably there are better ways to implement SectionSelect that works for single and multiple values  
 
 # Improvements propositions:
 add eslint and prettier  

@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-import { ReactComponent as CircleIcon } from './icons/CircleHalfFull.svg';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import FilterDimensionSection from './components/FilterDimensionSection';
 
 function App() {
   const test = 1;
@@ -31,14 +29,7 @@ function App() {
           </Grid>
           <Grid item xs={3}>
             <Item sx={{ background: '#ddf3ff' }}>
-              <Typography variant="h5" mb={3}>
-                Filter dimension values
-              </Typography>
-              <FilterTitle>
-                <span>Datasource</span>
-                <CircleIcon />
-                <RefreshIcon />
-              </FilterTitle>
+              <FilterDimensionSection />
             </Item>
           </Grid>
           <Grid item xs={9}>
@@ -62,14 +53,6 @@ const Root = styled('div')(({ theme }) => ({
 const Item = styled('div')(({ theme }) => ({
   padding: theme.spacing(1),
   border: `1px solid ${theme.palette.divider}`
-}));
-
-const FilterTitle = styled('div')(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-  fontSize: 16,
-  fontWeight: 'bold',
 }));
 
 const ChartPlaceholder = styled('div')(() => ({
