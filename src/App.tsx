@@ -4,9 +4,14 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import FilterDimensionSection from './components/FilterDimensionSection';
+import {
+  useQuery,
+} from 'react-query'
+import { getchAdvertising } from 'api/advertising'
+import Chart from 'components/commons/Chart'
 
 function App() {
-  const test = 1;
+  const { data, error, isLoading } = useQuery('advertising', getchAdvertising);
 
   return (
     <Root>
@@ -37,7 +42,9 @@ function App() {
               <Typography variant="h5" mb={3}>  
                 Datasource "Doubleclick (dfa)" and "Metrics"; All Campaigns
               </Typography>
-              <ChartPlaceholder />
+              <ChartWrapper>
+                <Chart loading={isLoading} />
+              </ChartWrapper>
             </Item>
           </Grid>
         </Grid>
@@ -55,10 +62,9 @@ const Item = styled('div')(({ theme }) => ({
   border: `1px solid ${theme.palette.divider}`
 }));
 
-const ChartPlaceholder = styled('div')(() => ({
+const ChartWrapper = styled('div')(() => ({
   height: 300,
   width: '100%',
-  background: '#ddf3ff'
 }));
 
 export default App;

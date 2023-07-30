@@ -5,7 +5,7 @@ import data
 find and add chart to the project  
 add unit test for filtering  
 add filtering  
-add react-query, json-server and load data  
++add react-query, json-server and load data  
 add loading and error state  
 edit README.md, add info how to run and deploy  
 take a second look on components architecture: is it scalable and generic?  
@@ -18,6 +18,8 @@ add integration tests
 
 # Side notes
 Probably there are better ways to implement SectionSelect that works for single and multiple values  
+I picked Recharts, but maybe this is not the bes toption. Maybe Canvas chart would fit better  
+I didn't use react-query for a while, so I'm not sure it is the best way  
 
 # Improvements propositions:
 add eslint and prettier  
