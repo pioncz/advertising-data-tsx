@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 
 interface IOptions { key: string; label: string; value: string };
 
-const SectionSelect = ({ className, title, value, setValue, options, multiple = false }: { className?: string,  title: string, value: string[], setValue: (value: string[]) => void, options: IOptions[], multiple?: boolean }) => (
+const SectionSelect = ({ className, title, value, setValue, options, multiple = false, disabled = false }: { className?: string,  title: string, value: string[], setValue: (value: string[]) => void, options: IOptions[], multiple?: boolean, disabled?: boolean }) => (
   <div className={className}>
     <FilterTitle>
       <span>{title}</span>
@@ -24,6 +24,7 @@ const SectionSelect = ({ className, title, value, setValue, options, multiple = 
     {multiple ? (
       <Select
         multiple
+        disabled={disabled}
         value={value}
         onChange={(event: SelectChangeEvent<string[]>) => {
           const {
@@ -49,6 +50,7 @@ const SectionSelect = ({ className, title, value, setValue, options, multiple = 
       </Select>
     ): (
       <Select
+        disabled={disabled}
         value={value?.[0] || ''}
         onChange={(event: SelectChangeEvent) => {
           const {

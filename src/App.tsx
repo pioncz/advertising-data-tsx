@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -9,22 +9,39 @@ import {
 } from 'react-query'
 import { getchAdvertisingSmall } from 'api/advertising'
 import Chart from 'components/commons/Chart'
-import { parseCsv, formatDatasetFields, prepareDataset } from 'utils/csv'
+import { parseCsv, formatDatasetFields, prepareDataset, getUniqueValues } from 'utils/csv'
 
 function App() {
+  const [datasources, setDatasources] = useState<string[]>([]);
   const { data, error, isLoading } = useQuery('advertising', getchAdvertisingSmall);
-  const stringDataset = parseCsv(data);
-  const typedDataset = formatDatasetFields(
-    stringDataset,
-    (key, value) => {
-      if (['Clicks', 'Impressions'].includes(key)) {
-        return parseInt(value);
-      }
-      return value;
+
+  const stringDataset = useMemo(() => {
+    if (data?.length) {
+      return parseCsv(data);
     }
-  );
-  const dataset = prepareDataset(typedDataset, ['Clicks', 'Impressions']);
-  console.log(dataset);
+    return [];
+  }, [data]);
+
+  const allDatasources = useMemo(() => {
+    return getUniqueValues(stringDataset, 'Datasource');
+  }, [stringDataset]);
+
+  const dataset = useMemo(() => {
+    if (stringDataset?.length) {
+      const typedDataset = formatDatasetFields(
+        stringDataset,
+        (key, value) => {
+          if (['Clicks', 'Impressions'].includes(key)) {
+            return parseInt(value);
+          }
+          return value;
+        }
+      );
+      return prepareDataset(typedDataset, ['Clicks', 'Impressions'], datasources);
+    }
+    return [];
+  }, [stringDataset, datasources]);
+
   return (
     <Root>
       <Typography variant="h5" mb={3}>
@@ -46,7 +63,7 @@ function App() {
           </Grid>
           <Grid item xs={3}>
             <Item sx={{ background: '#ddf3ff' }}>
-              <FilterDimensionSection />
+              <FilterDimensionSection allDatasources={allDatasources} selectedDatasources={datasources} onChange={setDatasources} />
             </Item>
           </Grid>
           <Grid item xs={9}>

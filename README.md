@@ -3,8 +3,8 @@
 +prototype layout (with all inputs, blue rect as chart placeholder)  
 +import data  
 +find and add chart to the project  
-add unit test for filtering  
-add filtering  
++add unit test for filtering  
++add filtering  
 +add react-query, json-server and load data  
 add loading and error state  
 edit README.md, add info how to run and deploy  

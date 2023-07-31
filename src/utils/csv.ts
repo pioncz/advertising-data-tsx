@@ -1,9 +1,11 @@
 import reduce from 'lodash/reduce';
 import compact from 'lodash/compact';
 import groupBy from 'lodash/groupBy';
+import uniq from 'lodash/uniq';
+import filter from 'lodash/filter';
 import { parseToDate } from 'utils/date';
 
-export const parseCsv = (input?: string) => {
+export const parseCsv = (input?: string): any[] => {
   const lines = input?.split('\n');
   const headers = compact(lines?.[0].split(','));
 
@@ -41,8 +43,10 @@ const sumValues = (arr: any, keysToSum: string[]) =>
     return acc;
   }, {});
 
-export const prepareDataset = (dataset: any, keysToSum: string[]) => {
-  const grouppedByDate = groupBy(dataset, 'Date');
+export const prepareDataset = (dataset: any, keysToSum: string[], datasources?: string[]) => {
+  const filteredDataset = datasources?.length ? dataset.filter((entry: any) => datasources.includes(entry.Datasource)) : dataset;
+
+  const grouppedByDate = groupBy(filteredDataset, 'Date');
 
   const sumsForDates = reduce(grouppedByDate, (acc: any, value: any, key: string) => {
     acc[key] = sumValues(value, keysToSum);
@@ -54,3 +58,5 @@ export const prepareDataset = (dataset: any, keysToSum: string[]) => {
 
   return arr;
 }
+
+export const getUniqueValues = (dataset: any, key: string): any[] => uniq(dataset.map((entry: any) => entry[key]))
