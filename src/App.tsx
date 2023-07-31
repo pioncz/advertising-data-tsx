@@ -9,13 +9,22 @@ import {
 } from 'react-query'
 import { getchAdvertisingSmall } from 'api/advertising'
 import Chart from 'components/commons/Chart'
-import { parseCsv, formatDatasetFields } from 'utils/csv'
+import { parseCsv, formatDatasetFields, prepareDataset } from 'utils/csv'
 
 function App() {
   const { data, error, isLoading } = useQuery('advertising', getchAdvertisingSmall);
   const stringDataset = parseCsv(data);
-  const dataset = formatDatasetFields(stringDataset, ['Clicks', 'Impressions'], (value) => parseInt(value));
-
+  const typedDataset = formatDatasetFields(
+    stringDataset,
+    (key, value) => {
+      if (['Clicks', 'Impressions'].includes(key)) {
+        return parseInt(value);
+      }
+      return value;
+    }
+  );
+  const dataset = prepareDataset(typedDataset, ['Clicks', 'Impressions']);
+  console.log(dataset);
   return (
     <Root>
       <Typography variant="h5" mb={3}>

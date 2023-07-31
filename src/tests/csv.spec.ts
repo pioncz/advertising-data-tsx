@@ -29,12 +29,12 @@ describe('parseCsv', () => {
 
 describe('formatDatasetFields', () => {
   it('returns same array if there are no fields provided', () => {
-    const result = formatDatasetFields([{ a: 1, b: 1 }], [], (value) => value);
+    const result = formatDatasetFields([{ a: 1, b: 1 }], (key, value) => value);
     expect(result).toEqual([{ a: 1, b: 1 }]);
   });
 
   it('returns modified values for provided keys and mutation function', () => {
-    const result = formatDatasetFields([{ a: 1, b: 1 }, { a: 2, b: 2 }], ['b'], (value) => 2 * value);
+    const result = formatDatasetFields([{ a: 1, b: 1 }, { a: 2, b: 2 }], (key, value) => key === 'b' ? 2 * value : value);
     expect(result).toEqual([{ a: 1, b: 2 }, { a: 2, b: 4 }]);
   });
 });

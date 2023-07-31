@@ -1,5 +1,7 @@
 import reduce from 'lodash/reduce';
 import compact from 'lodash/compact';
+import groupBy from 'lodash/groupBy';
+import { parseToDate } from 'utils/date';
 
 export const parseCsv = (input?: string) => {
   const lines = input?.split('\n');
@@ -7,7 +9,7 @@ export const parseCsv = (input?: string) => {
 
   if (!lines || !headers?.length) return [];
 
-  return reduce(lines.slice(1, lines.length), (acc: any, value) => {
+  return reduce(lines.slice(1, lines.length), (acc: any, value: any) => {
     const values = value.split(',');
     const newEntry: any = {};
     headers.forEach((header, index) => newEntry[header] = values[index]);
@@ -18,14 +20,37 @@ export const parseCsv = (input?: string) => {
 
 export const formatDatasetFields = (
   dataset: any,
-  fields: string[],
-  formatFunction: (value: any) => any
-) => dataset.map((entry: any) => {
-  const newEntry = {...entry};
+  formatFunction: (key: string, value: any) => any
+) => {
+  return dataset.map((entry: any) => {
+    const newEntry = {...entry};
 
-  fields.forEach((field) => {
-    newEntry[field] = formatFunction(newEntry[field]);
+    for (const [key, value] of Object.entries(entry)) {
+      newEntry[key] = formatFunction(key, value);
+    }
+
+    return newEntry;
   });
+};
 
-  return newEntry;
-});
+const sumValues = (arr: any, keysToSum: string[]) =>
+  reduce(arr, (acc: any, value: any) => {
+    keysToSum.forEach((keyToSum) => {
+      acc[keyToSum] = (acc[keyToSum] || 0) + Number(value[keyToSum] || 0);
+    });
+    return acc;
+  }, {});
+
+export const prepareDataset = (dataset: any, keysToSum: string[]) => {
+  const grouppedByDate = groupBy(dataset, 'Date');
+
+  const sumsForDates = reduce(grouppedByDate, (acc: any, value: any, key: string) => {
+    acc[key] = sumValues(value, keysToSum);
+    return acc;
+  }, {});
+  const arr = reduce(sumsForDates, (acc: any, value: any, key: string) => 
+    [...acc, { Date: parseToDate(key), ...value }]
+  , []);
+
+  return arr;
+}
