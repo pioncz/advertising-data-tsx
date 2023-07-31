@@ -15,3 +15,17 @@ export const parseCsv = (input?: string) => {
     return [...acc, newEntry];
   }, []);
 };
+
+export const formatDatasetFields = (
+  dataset: any,
+  fields: string[],
+  formatFunction: (value: any) => any
+) => dataset.map((entry: any) => {
+  const newEntry = {...entry};
+
+  fields.forEach((field) => {
+    newEntry[field] = formatFunction(newEntry[field]);
+  });
+
+  return newEntry;
+});

@@ -7,11 +7,14 @@ import FilterDimensionSection from './components/FilterDimensionSection';
 import {
   useQuery,
 } from 'react-query'
-import { getchAdvertising } from 'api/advertising'
+import { getchAdvertisingSmall } from 'api/advertising'
 import Chart from 'components/commons/Chart'
+import { parseCsv, formatDatasetFields } from 'utils/csv'
 
 function App() {
-  const { data, error, isLoading } = useQuery('advertising', getchAdvertising);
+  const { data, error, isLoading } = useQuery('advertising', getchAdvertisingSmall);
+  const stringDataset = parseCsv(data);
+  const dataset = formatDatasetFields(stringDataset, ['Clicks', 'Impressions'], (value) => parseInt(value));
 
   return (
     <Root>
@@ -43,7 +46,7 @@ function App() {
                 Datasource "Doubleclick (dfa)" and "Metrics"; All Campaigns
               </Typography>
               <ChartWrapper>
-                <Chart loading={isLoading} />
+                <Chart loading={isLoading} dataset={dataset} />
               </ChartWrapper>
             </Item>
           </Grid>
