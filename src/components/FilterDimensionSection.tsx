@@ -24,7 +24,7 @@ const FilterDimensionSection = ({ allDatasources, selectedDatasources, onChange 
       <Typography variant="h5" mb={3}>
         Filter dimension values
       </Typography>
-      <StyledSectionSelect title="Datasource" value={datasources} setValue={(newValues) => setDatasources(newValues)} options={datasourceOptions} multiple disabled={!datasources.length} />
+      <StyledSectionSelect title="Datasource" value={datasources} setValue={(newValues) => setDatasources(newValues)} options={datasourceOptions} multiple disabled={!allDatasources.length} />
       <StyledSectionSelect title="Campaign" value={[campaign]} setValue={(newValues) => setCampaign(newValues?.[0])} options={campaignOptions} disabled />
       <Button variant="contained" disabled={applyDisabled} onClick={handleApply}>
         Apply

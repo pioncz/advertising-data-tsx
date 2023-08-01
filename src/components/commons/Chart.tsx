@@ -7,7 +7,7 @@ import { red } from '@mui/material/colors';
 
 const Chart = ({ loading, error, dataset }: { loading: boolean, error?: any, dataset: any }) => {
   const showChart = !loading && !error && dataset;
-  
+
   return (
     <Root>
       {loading && <CircularProgress />}

@@ -1,95 +1,48 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import FilterDimensionSection from './components/FilterDimensionSection';
+import FilterDimensionInfo from 'components/FilterDimensionInfo'
 import {
   useQuery,
 } from 'react-query'
 import { getchAdvertisingSmall } from 'api/advertising'
 import Chart from 'components/commons/Chart'
-import { parseCsv, formatDatasetFields, prepareDataset, getUniqueValues } from 'utils/csv'
+import Layout from 'components/commons/Layout'
+import { useExtractDataset } from 'hooks/useExtractDataset'
 
 function App() {
   const [datasources, setDatasources] = useState<string[]>([]);
-  const { data, error, isLoading, isError } = useQuery('advertising', getchAdvertisingSmall);
-
-  const stringDataset = useMemo(() => {
-    if (data?.length) {
-      return parseCsv(data);
-    }
-    return [];
-  }, [data]);
-
-  const allDatasources = useMemo(() => {
-    return getUniqueValues(stringDataset, 'Datasource');
-  }, [stringDataset]);
-
-  const dataset = useMemo(() => {
-    if (stringDataset?.length) {
-      const typedDataset = formatDatasetFields(
-        stringDataset,
-        (key, value) => {
-          if (['Clicks', 'Impressions'].includes(key)) {
-            return parseInt(value);
-          }
-          return value;
-        }
-      );
-      return prepareDataset(typedDataset, ['Clicks', 'Impressions'], datasources);
-    }
-    return [];
-  }, [stringDataset, datasources]);
+  const { data, error, isLoading } = useQuery('advertising', getchAdvertisingSmall);
+  const [dataset, allDatasources] = useExtractDataset(data, datasources);
 
   return (
-    <Root>
-      <Typography variant="h5" mb={3}>
-        Adverity Advertising Data ETL-V Challenge
+    <Layout
+      title="Adverity Advertising Data ETL-V Challenge"
+      infoSection={
+        <FilterDimensionInfo />
+      }
+      filterSection={
+        <FilterDimensionSection
+          allDatasources={allDatasources}
+          selectedDatasources={datasources}
+          onChange={setDatasources}
+        />
+      }
+    >
+      <Typography variant="h5" mb={3}>  
+        Datasources: {datasources.length ? datasources.join(', ') : 'All'}; All Campaigns
       </Typography>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2} sx={{ gridAutoColumns: '1fr', gridAutoFlow: 'column' }}>
-          <Grid item xs={12} sx={{ fontSize: 18 }}>
-            <Item>
-              - Select zero to N <i>Datasources</i><br />
-              - Select zero to N <i>Campaigns</i>
-              <Box mb={2}>
-                <Typography variant="caption">
-                (where zero means "All")
-                </Typography>
-              </Box>
-              Hitting "Apply", filters the chart to show a timeseries for both <i>Clicks</i> and <i>Impressions</i> for given <i>Datasources</i> and <i>Campaigns</i> - logical AND
-            </Item>
-          </Grid>
-          <Grid item xs={3}>
-            <Item sx={{ background: '#ddf3ff' }}>
-              <FilterDimensionSection allDatasources={allDatasources} selectedDatasources={datasources} onChange={setDatasources} />
-            </Item>
-          </Grid>
-          <Grid item xs={9}>
-            <Item>
-              <Typography variant="h5" mb={3}>  
-                Datasource "Doubleclick (dfa)" and "Metrics"; All Campaigns
-              </Typography>
-              <ChartWrapper>
-                <Chart loading={isLoading} dataset={dataset} error={error} />
-              </ChartWrapper>
-            </Item>
-          </Grid>
-        </Grid>
-      </Box>
-    </Root>
+      <ChartWrapper>
+        <Chart loading={isLoading} dataset={dataset} error={error} />
+      </ChartWrapper>
+    </Layout>
   );
 }
 
-const Root = styled('div')(({ theme }) => ({
-  padding: theme.spacing(2),
-}));
 
-const Item = styled('div')(({ theme }) => ({
-  padding: theme.spacing(1),
-  border: `1px solid ${theme.palette.divider}`
-}));
 
 const ChartWrapper = styled('div')(() => ({
   height: 300,
