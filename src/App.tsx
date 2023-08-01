@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import FilterDimensionSection from './components/FilterDimensionSection';
 import FilterDimensionInfo from 'components/FilterDimensionInfo'
 import {
@@ -36,7 +34,7 @@ function App() {
         Datasources: {datasources.length ? datasources.join(', ') : 'All'}; All Campaigns
       </Typography>
       <ChartWrapper>
-        <Chart loading={isLoading} dataset={dataset} error={error} />
+        <Chart loading={isLoading} dataset={dataset} error={error} xAxisDataKeys={['Date']} yAxisDataKeys={['Clicks', 'Impressions']} />
       </ChartWrapper>
     </Layout>
   );

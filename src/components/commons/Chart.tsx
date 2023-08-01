@@ -5,7 +5,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Legend, ResponsiveContain
 import { displayDate } from 'utils/date';
 import { red } from '@mui/material/colors';
 
-const Chart = ({ loading, error, dataset }: { loading: boolean, error?: any, dataset: any }) => {
+const Chart = ({ loading, error, dataset, xAxisDataKeys, yAxisDataKeys }: { loading: boolean, error?: any, dataset: any, xAxisDataKeys: string[], yAxisDataKeys: string[] }) => {
   const showChart = !loading && !error && dataset;
 
   return (
@@ -15,15 +15,20 @@ const Chart = ({ loading, error, dataset }: { loading: boolean, error?: any, dat
       {showChart && (
         <ResponsiveContainer width="100%" height={300}>
           <LineChart width={600} height={300} data={dataset}>
-            <Line type="monotone" yAxisId="Clicks" dataKey="Clicks" stroke="#8884d8" dot={false} />
-            <Line type="monotone" yAxisId="Impressions" dataKey="Impressions" stroke="#82ca9d" dot={false} />
             <CartesianGrid stroke="#ccc" vertical={false} />
-            <XAxis
-              dataKey="Date"
-              tickFormatter={displayDate}
-            />
-            <YAxis dataKey="Clicks" yAxisId="Clicks" />
-            <YAxis dataKey="Impressions" yAxisId="Impressions" orientation='right' />
+            {xAxisDataKeys.map(xAxis => (
+              <XAxis
+                key={xAxis}
+                dataKey={xAxis}
+                tickFormatter={displayDate}
+              />
+            ))}
+            {yAxisDataKeys.map((yAxis, i) => (
+              <React.Fragment key={yAxis}>
+                <YAxis dataKey={yAxis} yAxisId={yAxis} orientation={i % 2 === 0 ? 'left' : 'right'} />
+                <Line type="monotone" yAxisId={yAxis} dataKey={yAxis} stroke={Colors[i]} dot={false} />
+              </React.Fragment>
+            ))}
             <Legend height={36} />
           </LineChart>
         </ResponsiveContainer>
@@ -31,6 +36,11 @@ const Chart = ({ loading, error, dataset }: { loading: boolean, error?: any, dat
     </Root>
   );
 }
+
+const Colors = [
+  '#8884d8',
+  '#82ca9d'
+]
 
 const Root = styled('div')(({ theme }) => ({
   width: '100%',
