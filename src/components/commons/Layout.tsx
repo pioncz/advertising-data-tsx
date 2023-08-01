@@ -9,33 +9,32 @@ const Layout = ({ title, infoSection, filterSection, children }: { title: string
     <Typography variant="h5" mb={3}>
       {title}
     </Typography>
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2} sx={{ gridAutoColumns: '1fr', gridAutoFlow: 'column' }}>
-        <Grid item xs={12} sx={{ fontSize: 18 }}>
-          <Item>
-            {infoSection}
-          </Item>
-        </Grid>
-        <Grid item xs={3}>
-          <Item sx={{ background: '#ddf3ff' }}>
-            {filterSection}
-          </Item>
-        </Grid>
-        <Grid item xs={9}>
-          <Item>
-            {children}
-          </Item>
-        </Grid>
+    <Item mb={1} >
+    {infoSection}
+    </Item>
+    <Grid container spacing={1} sx={{ height: '100%' }}>
+      <Grid item xs={12} md={3}>
+        <Item sx={{ background: '#ddf3ff', height: '100%' }}>
+          {filterSection}
+        </Item>
       </Grid>
-    </Box>
+      <Grid item xs={12} md={9}>
+        <Item sx={{ height: '100%', overflow: 'hidden' }}>
+          {children}
+        </Item>
+      </Grid>
+    </Grid>
   </Root>
 );
 
 const Root = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
   padding: theme.spacing(2),
 }));
 
-const Item = styled('div')(({ theme }) => ({
+const Item = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1),
   border: `1px solid ${theme.palette.divider}`
 }));

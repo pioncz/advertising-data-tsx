@@ -42,9 +42,10 @@ const Colors = [
   '#82ca9d'
 ]
 
-const Root = styled('div')(({ theme }) => ({
+const Root = styled('div')(() => ({
   width: '100%',
   height: '100%',
+  maxHeight: 300,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
