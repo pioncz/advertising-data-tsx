@@ -6,7 +6,7 @@
 +add unit test for filtering  
 +add filtering  
 +add react-query, json-server and load data  
-add loading and error state  
++add loading and error state  
 edit README.md, add info how to run and deploy  
 take a second look on components architecture: is it scalable and generic?  
 as little chart rerenders as possible  

@@ -13,7 +13,7 @@ import { parseCsv, formatDatasetFields, prepareDataset, getUniqueValues } from '
 
 function App() {
   const [datasources, setDatasources] = useState<string[]>([]);
-  const { data, error, isLoading } = useQuery('advertising', getchAdvertisingSmall);
+  const { data, error, isLoading, isError } = useQuery('advertising', getchAdvertisingSmall);
 
   const stringDataset = useMemo(() => {
     if (data?.length) {
@@ -72,7 +72,7 @@ function App() {
                 Datasource "Doubleclick (dfa)" and "Metrics"; All Campaigns
               </Typography>
               <ChartWrapper>
-                <Chart loading={isLoading} dataset={dataset} />
+                <Chart loading={isLoading} dataset={dataset} error={error} />
               </ChartWrapper>
             </Item>
           </Grid>

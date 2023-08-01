@@ -4,8 +4,13 @@ const endpoints = {
 }
 
 const fetchCsv = async (endpoint: string) => {
-  const res = await fetch(endpoint);
-  return res.text();
+  try {
+    const res = await fetch(endpoint);
+    return res.text();
+  } catch (err) {
+    console.error(err);
+    throw new Error('Error while fetching csv')
+  }
 };
 
 export const getchAdvertising = async () => fetchCsv(endpoints.advertising);
